@@ -28,7 +28,16 @@ void PrintTree(struct Node *root);
 int
 main(int argc, char** argv)
 {
-
+	printf("size of long: %ld\n", FibRecur(7));
 
 	return 0;
 }
+/*
+long
+FibRecur(short n)
+{
+	if( n <= 1 )
+		return 1L;
+	return FibRecur(n - 1) + FibRecur(n-2);
+}
+*/
