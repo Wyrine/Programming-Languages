@@ -30,13 +30,14 @@ int
 main(int argc, char** argv)
 {
 	printf("size of long: %ld\n", FibRecur(7));
-	struct Stack *s = malloc(sizeof(struct Stack));
-	s->data = malloc(sizeof(int) * 5);
+	struct Stack *s = calloc(1, sizeof(struct Stack));
+	s->data =calloc(5, sizeof(int));
+	s->data += 5;
 	Push(s, 1);
 	Push(s, 2);
 	printf("First: %d, Second %d\n", Pop(s), Pop(s));
 	
-	free(s->data);
+//	free(s->data);
 	free(s);
 	return 0;
 }
@@ -50,18 +51,17 @@ FibRecur(short n)
 }
 */
 
-
+/*
 void
 Push(struct Stack *s, int value)
 {
-	(s->data)++;
+	(s->data)--;
 	*(s->data) = value;
 }
-
+*/
 int
 Pop(struct Stack *s)
 {
-	int rv = *(s->data);
-	(s->data)--;
-	return rv;
+	(s->data)++;
+	return *(s->data - 1);
 }	

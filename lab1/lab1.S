@@ -28,3 +28,17 @@ FibRecur:
 1:// base case
 	mov rax, 1
 	ret
+
+.global Push
+Push:
+	//don't care about return value aka rax
+	//rdi = s, edi = val
+	//s->data
+	mov rdx, [rdi]
+	//s->data --
+	sub rdx, 4 // (s->data) += 4 bytes
+	//*(s->data) = esi
+	mov [rdx], esi
+	mov [rdi], rdx
+	ret
+
