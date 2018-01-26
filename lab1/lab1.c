@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Stack {
 	int *data;
@@ -29,7 +30,14 @@ int
 main(int argc, char** argv)
 {
 	printf("size of long: %ld\n", FibRecur(7));
-
+	struct Stack *s = malloc(sizeof(struct Stack));
+	s->data = malloc(sizeof(int) * 5);
+	Push(s, 1);
+	Push(s, 2);
+	printf("First: %d, Second %d\n", Pop(s), Pop(s));
+	
+	free(s->data);
+	free(s);
 	return 0;
 }
 /*
@@ -41,3 +49,19 @@ FibRecur(short n)
 	return FibRecur(n - 1) + FibRecur(n-2);
 }
 */
+
+
+void
+Push(struct Stack *s, int value)
+{
+	(s->data)++;
+	*(s->data) = value;
+}
+
+int
+Pop(struct Stack *s)
+{
+	int rv = *(s->data);
+	(s->data)--;
+	return rv;
+}	
