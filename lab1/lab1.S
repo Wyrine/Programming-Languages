@@ -79,12 +79,39 @@ Pop:
 Insert:
 	//rdi = root, esi = value
 	ret
-
+*/
 .global Search
 Search:
 	//rdi = root, esi = search_value
+	// is root == NULL?
+	cmp rdi, 0
+	//if so, go to 1f
+	je 1f
+	//ecx is now root->value
+	mov ecx, [rdi]
+	//is root->value == search_value?
+	cmp ecx, esi
+	//if so, go to 1f
+	je 1f
+	//if root->value < search_value go to 2f
+	jl 2f
+	//else
+	push rdi
+	mov rdi, [rdi+8]
+	call Search
+	pop rdi
 	ret
-*/
+
+1:
+	mov rax, rdi
+	ret
+2:
+	push rdi
+	mov rdi, [rdi+16]
+	call Search
+	pop rdi
+	ret
+	
 .global PrintTree
 PrintTree:
 	//rdi = root

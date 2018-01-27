@@ -43,8 +43,11 @@ main(int argc, char** argv)
 	struct Node* root = Insert(NULL, 0);
 	Insert(root, 1);
 	Insert(root, -1);
-	Search(root, -1);
-
+	struct Node* temp =	Search(root, -1);
+	if(temp)
+		printf("%d is here\n", temp->value);
+	else
+		printf("Null\n");
 	PrintTree(root);
 	
 	return 0;
@@ -83,7 +86,7 @@ Insert(struct Node *root, int value)
 		return temp;
 	}
 }
-
+/*
 struct Node*
 Search(struct Node *root, int search_value)
 {
@@ -92,7 +95,7 @@ Search(struct Node *root, int search_value)
 	if(root->value < search_value)
 		return Search(root->right, search_value);
 	return Search(root->left, search_value);
-}
+}*/
 /*
 void
 PrintTree(struct Node *root)
