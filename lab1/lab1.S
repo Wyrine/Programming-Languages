@@ -29,16 +29,40 @@ FibRecur:
 	mov rax, 1
 	ret
 
+.global FibTail
+FibTail:
+	mov rsi, 1 //rv1
+	mov rdx, 1 //rv2
+1:
+	cmp di, 1
+	//if n < 1
+	jl 1f
+	//n - 1
+	dec di
+	mov rcx, rdx
+	add rdx, rsi
+	//rv2 = tmp
+	mov rsi, rcx
+	jmp 1b
+1:
+	mov rax, rsi
+	ret
+
+/*
+.global Pop
+Pop:
+	ret
+*/
 .global Push
 Push:
-	//don't care about return value aka rax
 	//rdi = s, edi = val
 	//s->data
 	mov rdx, [rdi]
 	//s->data --
-	sub rdx, 4 // (s->data) += 4 bytes
+	sub rdx, 4 
 	//*(s->data) = esi
 	mov [rdx], esi
+	//Update s to reflect changes
 	mov [rdi], rdx
 	ret
 
