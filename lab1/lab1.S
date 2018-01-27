@@ -48,11 +48,15 @@ FibTail:
 	mov rax, rsi
 	ret
 
-/*
 .global Pop
 Pop:
+	mov rax, [rdi]
+	mov rax, [rax]
+	add DWORD PTR[rdi], 4
 	ret
-*/
+
+
+
 .global Push
 Push:
 	//rdi = s, edi = val

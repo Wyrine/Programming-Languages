@@ -26,8 +26,6 @@ struct Node *Insert(struct Node *root, int value);
 struct Node *Search(struct Node *root, int search_value);
 void PrintTree(struct Node *root);
 
-#define TEST *((short *) argv[1])
-
 
 int
 main(int argc, char** argv)
@@ -73,9 +71,10 @@ Push(struct Stack *s, int value)
 	*(s->data) = value;
 }
 */
+/*
 int
 Pop(struct Stack *s)
 {
 	(s->data)++;
 	return *(s->data - 1);
-}	
+}	*/
