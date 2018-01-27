@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 struct Stack {
 	int *data;
 };
@@ -41,9 +41,11 @@ main(int argc, char** argv)
 	*/
 
 	struct Node* root = Insert(NULL, 0);
-	Insert(root, 1);
-	Insert(root, -1);
-	struct Node* temp =	Search(root, -1);
+	int i;
+	srand(time(0));
+	for(i = 0; i < 10; i++)
+		Insert(root, rand()%1000);
+	struct Node* temp =	Search(root, rand()%1000);
 	if(temp)
 		printf("%d is here\n", temp->value);
 	else
@@ -67,24 +69,15 @@ Insert(struct Node *root, int value)
 	{
 		if(root->left != NULL)
 			return Insert(root->left, value);
-		else
-		{
-			struct Node *temp = calloc(1, sizeof(struct Node));
-			temp->value = value;
-			root->left = temp;
-			return temp;
-		}
+		root->left = calloc(1, sizeof(struct Node));
+		root->left->value = value;
+		return root->left;
 	}
-	//else
 	if(root->right != NULL)
 		return Insert(root->right, value);
-	else
-	{
-		struct Node *temp = calloc(1, sizeof(struct Node));
-		temp->value = value;
-		root->right = temp;
-		return temp;
-	}
+	root->right = calloc(1, sizeof(struct Node));
+	root->right->value = value;
+	return root->right;
 }
 /*
 struct Node*

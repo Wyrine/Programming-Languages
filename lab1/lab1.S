@@ -74,12 +74,41 @@ Pop:
 	mov rax, [rax]
 	add DWORD PTR[rdi], 4
 	ret
+
 /*
 .global Insert
 Insert:
 	//rdi = root, esi = value
+	cmp rdi, 0
+	jne 1f
+	//root == NULL
+	push rsi
+	//set up parameters for calloc
+	mov rdi, 1
+	mov rsi, 24
+	//call calloc
+	call calloc@plt
+	//get the value parameter back
+	pop rsi
+	//put esi into root->value
+	mov [rax], esi
+	//make root = rax so the reference and the return are same
+	mov rdi, rax
+	ret
+1://root is not NULL if we're here
+	//ecx is now root->value
+	mov ecx, [rdi]
+	//compare root->value and value
+	cmp ecx, esi
+	jge 2f
+	//root->value < value
+	cmp
+2://root->value >= value
+	
 	ret
 */
+
+
 .global Search
 Search:
 	//rdi = root, esi = search_value
@@ -112,6 +141,7 @@ Search:
 	pop rdi
 	ret
 	
+//inorder traversal of tree and print values
 .global PrintTree
 PrintTree:
 	//rdi = root
