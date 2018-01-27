@@ -93,7 +93,7 @@ Search(struct Node *root, int search_value)
 		return Search(root->right, search_value);
 	return Search(root->left, search_value);
 }
-
+/*
 void
 PrintTree(struct Node *root)
 {
@@ -103,7 +103,7 @@ PrintTree(struct Node *root)
 	if(root->right != NULL)
 		PrintTree(root->right);
 }
-
+*/
 
 /*
 long

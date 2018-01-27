@@ -1,6 +1,11 @@
 .intel_syntax noprefix
 
+.section .rodata
+out: .asciz "%d\n"
+
 .section .text
+
+// Fibonacci Functions
 .global FibRecur
 FibRecur:
 	cmp di, 1
@@ -48,18 +53,11 @@ FibTail:
 	mov rax, rsi
 	ret
 
-.global Pop
-Pop:
-	mov rax, [rdi]
-	mov rax, [rax]
-	add DWORD PTR[rdi], 4
-	ret
 
-
-
+// Stack Functions
 .global Push
 Push:
-	//rdi = s, edi = val
+	//rdi = s, esi = val
 	//s->data
 	mov rdx, [rdi]
 	//s->data --
@@ -70,3 +68,57 @@ Push:
 	mov [rdi], rdx
 	ret
 
+.global Pop
+Pop:
+	mov rax, [rdi]
+	mov rax, [rax]
+	add DWORD PTR[rdi], 4
+	ret
+/*
+.global Insert
+Insert:
+	//rdi = root, esi = value
+	ret
+
+.global Search
+Search:
+	//rdi = root, esi = search_value
+	ret
+*/
+.global PrintTree
+PrintTree:
+	//rdi = root
+	//rsi is root->left
+	mov rsi, [rdi+8]
+	//check to see that it's not NULL
+	cmp rsi, 0
+	je	1f
+	//root->left is not null
+	//saving root
+	push rdi
+	//root = root->left
+	mov rdi, rsi
+	//call recursive func
+	call PrintTree
+	pop rdi
+
+1://printf part of the statement
+	//save root
+	push rdi
+	//rsi = root->value
+	mov rsi, [rdi] 
+	lea	rdi, [rip+out]
+	mov rax, 0
+	call printf@plt
+	pop rdi
+
+	//PrintTree(root->right);
+	mov rsi, [rdi+16]
+	cmp rsi, 0
+	je 2f
+	push rdi
+	mov rdi, rsi
+	call PrintTree
+	pop rdi
+2:
+	ret
