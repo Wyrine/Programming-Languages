@@ -1,1 +1,1 @@
-# cs365
+# cs365 -- Taught by Dr. Stephen Marz
