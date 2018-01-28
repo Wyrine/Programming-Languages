@@ -89,15 +89,17 @@ Insert:
 	jne 1f
 	//root == NULL
 	push rsi
-	//set up parameters for calloc
-	mov rdi, 1
-	mov rsi, 24
-	//call calloc
-	call calloc@plt
+	//set up malloc(sizeof struct is 24)
+	mov rdi, 24
+	//call malloc
+	call malloc@plt
 	//get the value parameter back
 	pop rsi
 	//put esi into root->value
 	mov [rax], esi
+	//set up block's left and right to be NULL
+	mov QWORD PTR[rax+8], 0
+	mov QWORD PTR[rax+16], 0
 	//make root = rax so the reference and the return are same
 	mov rdi, rax
 	ret
@@ -121,18 +123,20 @@ Insert:
 	mov rdi, rcx
 	//if not go to 3f
 	jne 3f
-	//otherwise, store value(root is already stored)
+	//otherwise, store value because it might be altered
 	push rsi
-	//prep for calloc
-	mov rdi, 1
-	mov rsi, 24
-	//call calloc
-	call calloc@plt
+	//set up malloc(sizeof struct is 24)
+	mov rdi, 24
+	//call malloc
+	call malloc@plt
 	//get back stored root and value
 	pop rsi
 	pop rdi
 	//setting the new block's value as our value
 	mov [rax], rsi
+	//set up block's left and right to be NULL
+	mov QWORD PTR[rax+8], 0
+	mov QWORD PTR[rax+16], 0
 	//updating right pointer to be the new block
 	mov [rdi + 16], rax
 	ret
@@ -147,18 +151,20 @@ Insert:
 	//root = root->left
 	mov rdi, rcx
 	jne 3f
-	//otherwise, store value (root already stored)
+	//otherwise, store value because it might be altered
 	push rsi
-	//prep for calloc
-	mov rdi, 1
-	mov rsi, 24
-	//call calloc
-	call calloc@plt
+	//set up malloc(sizeof struct is 24)
+	mov rdi, 24
+	//call malloc
+	call malloc@plt
 	//get back stored root and value
 	pop rsi
 	pop rdi
 	//setting the new block's value as our value
 	mov [rax], rsi
+	//set up block's left and right to be NULL
+	mov QWORD PTR[rax+8], 0
+	mov QWORD PTR[rax+16], 0
 	//updating left pointer from root
 	mov [rdi + 8], rax
 	ret

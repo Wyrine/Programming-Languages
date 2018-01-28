@@ -43,9 +43,9 @@ main(int argc, char** argv)
 	struct Node* root = Insert(NULL, 0);
 	int i;
 	srand(time(0));
-	for(i = 0; i < 10; i++)
-		Insert(root, i+1);//rand()%1000);
-	struct Node* temp =	Search(root, rand()%1000);
+	for(i = 0; i < 100; i++)
+		Insert(root, rand());
+	struct Node* temp =	Search(root, rand());
 	if(temp)
 		printf("%d is here\n", temp->value);
 	else
