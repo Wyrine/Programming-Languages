@@ -77,8 +77,8 @@ Insert(struct Node *root, int value)
 	root->right = calloc(1, sizeof(struct Node));
 	root->right->value = value;
 	return root->right;
-}*/
-/*
+}
+
 struct Node*
 Search(struct Node *root, int search_value)
 {
@@ -87,8 +87,8 @@ Search(struct Node *root, int search_value)
 	if(root->value < search_value)
 		return Search(root->right, search_value);
 	return Search(root->left, search_value);
-}*/
-/*
+}
+
 void
 PrintTree(struct Node *root)
 {
@@ -98,9 +98,9 @@ PrintTree(struct Node *root)
 	if(root->right != NULL)
 		PrintTree(root->right);
 }
-*/
 
-/*
+
+
 long
 FibRecur(short n)
 {
