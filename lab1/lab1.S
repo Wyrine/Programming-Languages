@@ -1,3 +1,5 @@
+//Kirolos Shahat
+//Lab1 -- CS365
 .intel_syntax noprefix
 
 .section .rodata
@@ -70,11 +72,16 @@ Push:
 
 .global Pop
 Pop:
+	//rax = s->data
 	mov rax, [rdi]
+	// rax = *(s->data)
 	mov rax, [rax]
+	//s->data += 4 bytes
 	add DWORD PTR[rdi], 4
 	ret
 
+
+//Tree Functions
 .global Insert
 Insert:
 	//rdi = root, esi = value
@@ -180,18 +187,27 @@ Search:
 	jl 2f
 	//else
 	push rdi
+	//rdi = root->left
 	mov rdi, [rdi+8]
+	//search down left path
 	call Search
+	//get back root
 	pop rdi
 	ret
 
 1:
+	//root is either NULL or is the value so thus
+	//return root
 	mov rax, rdi
 	ret
 2:
+	//push root
 	push rdi
+	//root = root->right
 	mov rdi, [rdi+16]
+	//search right branch
 	call Search
+	//get back original root
 	pop rdi
 	ret
 	
@@ -218,6 +234,7 @@ PrintTree:
 	push rdi
 	//rsi = root->value
 	mov rsi, [rdi] 
+	//prep printf
 	lea	rdi, [rip+out]
 	mov rax, 0
 	call printf@plt
@@ -225,11 +242,16 @@ PrintTree:
 
 	//PrintTree(root->right);
 	mov rsi, [rdi+16]
+	//check if root->right is null
 	cmp rsi, 0
+	//if it is go to 2f
 	je 2f
 	push rdi
+	//root = root->right
 	mov rdi, rsi
+	//go right
 	call PrintTree
 	pop rdi
 2:
+	//done with current branch
 	ret
