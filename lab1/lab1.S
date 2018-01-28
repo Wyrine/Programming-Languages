@@ -75,7 +75,6 @@ Pop:
 	add DWORD PTR[rdi], 4
 	ret
 
-/*
 .global Insert
 Insert:
 	//rdi = root, esi = value
@@ -95,19 +94,74 @@ Insert:
 	//make root = rax so the reference and the return are same
 	mov rdi, rax
 	ret
+
+	
 1://root is not NULL if we're here
 	//ecx is now root->value
-	mov ecx, [rdi]
+	mov rcx, [rdi]
 	//compare root->value and value
 	cmp ecx, esi
 	jge 2f
-	//root->value < value
-	cmp
-2://root->value >= value
-	
-	ret
-*/
 
+	//root->value < value
+	//rcx is root->right
+	mov rcx, [rdi+16]
+	//check if root->right is null
+	cmp rcx, 0
+	//push rdi because it will be altered
+	push rdi
+	//rdi = root->right
+	mov rdi, rcx
+	//if not go to 3f
+	jne 3f
+	//otherwise, store value(root is already stored)
+	push rsi
+	//prep for calloc
+	mov rdi, 1
+	mov rsi, 24
+	//call calloc
+	call calloc@plt
+	//get back stored root and value
+	pop rsi
+	pop rdi
+	//setting the new block's value as our value
+	mov [rax], rsi
+	//updating right pointer to be the new block
+	mov [rdi + 16], rax
+	ret
+
+2://root->value >= value
+	//rcx is root->left
+	mov rcx, [rdi+8]
+	//check if root->left is null
+	cmp rcx, 0
+	//store root because it will be altered
+	push rdi
+	//root = root->left
+	mov rdi, rcx
+	jne 3f
+	//otherwise, store value (root already stored)
+	push rsi
+	//prep for calloc
+	mov rdi, 1
+	mov rsi, 24
+	//call calloc
+	call calloc@plt
+	//get back stored root and value
+	pop rsi
+	pop rdi
+	//setting the new block's value as our value
+	mov [rax], rsi
+	//updating left pointer from root
+	mov [rdi + 8], rax
+	ret
+
+3://continuing down the trail of stack frames from either path
+	//root is already the pointer it needs to be
+	call Insert
+	//get back original root
+	pop rdi
+	ret
 
 .global Search
 Search:

@@ -44,18 +44,17 @@ main(int argc, char** argv)
 	int i;
 	srand(time(0));
 	for(i = 0; i < 10; i++)
-		Insert(root, rand()%1000);
+		Insert(root, i+1);//rand()%1000);
 	struct Node* temp =	Search(root, rand()%1000);
 	if(temp)
 		printf("%d is here\n", temp->value);
 	else
 		printf("Null\n");
 	PrintTree(root);
-	
 	return 0;
 }
 
-
+/*
 struct Node*
 Insert(struct Node *root, int value)
 {
@@ -78,7 +77,7 @@ Insert(struct Node *root, int value)
 	root->right = calloc(1, sizeof(struct Node));
 	root->right->value = value;
 	return root->right;
-}
+}*/
 /*
 struct Node*
 Search(struct Node *root, int search_value)
