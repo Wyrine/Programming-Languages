@@ -5,11 +5,19 @@
 //~mystring()
 .global _ZN8mystringD1Ev
 _ZN8mystringD1Ev:
+	mov	QWORD PTR[rdi+8], 0
+	cmp QWORD PTR[rdi], 0
+	je 1f
+	mov rdi, [rdi]
+	call _Zd1Pv@plt
+1:
 	ret
 
 //mystring()
 .global _ZN8mystringC1Ev
 _ZN8mystringC1Ev:
+	mov QWORD PTR[rdi], 0
+	mov DWORD PTR[rdi+8], 0
 	ret
 
 //mystring(const char *s)
