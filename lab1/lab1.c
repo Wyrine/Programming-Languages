@@ -31,14 +31,13 @@ void PrintTree(struct Node *root);
 int
 main(int argc, char** argv)
 {
-	/*printf("tail: %ld | Recur: %ld\n", FibTail(2), FibRecur(8));
+	printf("tail: %ld | Recur: %ld\n", FibTail(2), FibRecur(8));
 	struct Stack *s = calloc(1, sizeof(struct Stack));
 	s->data =calloc(5, sizeof(int));
 	s->data += 5;
 	Push(s, 1);
 	Push(s, 2);
 	printf("First: %d, Second %d\n", Pop(s), Pop(s));
-	*/
 
 	struct Node* root = Insert(NULL, 0);
 	int i;

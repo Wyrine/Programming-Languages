@@ -54,3 +54,10 @@ public:
 	friend ostream &operator<<(ostream &s, const mystring &rhs);
 };
 
+mystring::~mystring()
+{
+	if( mString )
+		delete mString;
+	mString = nullptr;
+	mStringLength = 0;
+}

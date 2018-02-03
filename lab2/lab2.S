@@ -1,5 +1,8 @@
 .intel_synax noprefix
 
+.section .rodata
+empt: .asciz ""
+
 .section .text
 
 //~mystring()
@@ -23,6 +26,24 @@ _ZN8mystringC1Ev:
 //mystring(const char *s)
 .global _ZN8mystringC1EPKc
 _ZN8mystringC1EPKc:
+	push rdi
+	push rsi
+	mov rdi, rsi
+	
+	call strdup@plt
+	
+	pop rsi
+	pop rdi
+
+	mov [rdi], rax
+	
+	push rdi
+	mov rdi, rax
+	
+	call strlen@plt
+	
+	pop rdi
+	mov [rdi+8], eax
 	ret
 
 //mystring(const mystring &rhs)
@@ -43,6 +64,7 @@ _ZN8mystringaSEOKS_:
 //int length() const
 .global _ZNK8mystring6lengthEv
 _ZNK8mystring6lengthEv:
+	mov eax, [rdi+8]
 	ret
 
 //int find(const mystring &rhs) const
@@ -58,6 +80,7 @@ _ZNK8mystring4findEPKc:
 //const char *c_str() const
 .global _ZNK8mystring5c_strEv
 _ZNK8mystring5c_strEv:
+	mov rax, [rdi]
 	ret
 
 //friend ostream &operator<<(...)
