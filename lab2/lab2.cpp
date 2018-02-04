@@ -1,5 +1,6 @@
 #include <cstdio> 
-
+#include <iostream>
+using namespace std;
 class mystring
 {
 	char *mString;
@@ -22,7 +23,8 @@ public:
 	//Constructor that takes a mystring. You must copy mString and mStringLength.
 	//DO NOT just copy the pointer. You must allocate a new pointer and
 	//copy the string.
-	myString(const mystring &rhs);
+	mystring(const mystring &rhs);
+
 
 	//Assignment of C-style string. This must function just like
 	//mystring(const char *src) except that in this function, you must
@@ -53,11 +55,22 @@ public:
 	//will need to return the reference of ostream &s.
 	friend ostream &operator<<(ostream &s, const mystring &rhs);
 };
-
+/*
 mystring::~mystring()
 {
 	if( mString )
 		delete mString;
 	mString = nullptr;
 	mStringLength = 0;
+}*/
+
+
+
+int
+main()
+{
+	mystring a= mystring("Hello\n");
+	cout << a << a << a << a << a << a << a;
+
+	return 0;
 }
