@@ -70,7 +70,10 @@ int
 main()
 {
 	mystring a= mystring("Hello\n");
-	cout << a << a << a << a << a << a << a;
+	mystring b = "el";
+	int index = a.find(b);
+	cout << index << endl;
+	cout << a << b << a << b << a << b << a;
 
 	return 0;
 }

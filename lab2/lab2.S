@@ -91,10 +91,12 @@ _ZN8mystringaSEPKc:
 	pop rsi
 	pop rdi
 1:
+	push rdi
 	//call one argument constructor
 	call _ZN8mystringC1EPKc@plt
 	//make this* the return value
-	mov rax, rdi
+	pop rax
+	//mov rax, rdi
 	ret
 
 //mystring &operator=(const mystring &&rhs)
@@ -127,12 +129,56 @@ _ZNK8mystring6lengthEv:
 //int find(const mystring &rhs) const
 .global _ZNK8mystring4findERKS_
 _ZNK8mystring4findERKS_:
-	ret
+	mov rsi, [rsi]
 
 //int find(const char *s) const
 .global _ZNK8mystring4findEPKc
 _ZNK8mystring4findEPKc:
+	//get the string for the class
+	push rdi
+	push rsi
+
+	mov rdi, rsi
+	call strlen@plt
+	mov ecx, eax //r8d is strlen of the needle
+	
+	pop rsi
+	pop rdi
+
+	mov edx, [rdi + 8] //rdx is mStringLen	
+	mov rdi, [rdi] //rdi is mString
+	mov ebx, -1 //ebx is current index
+1:
+	inc ebx //increment index
+	cmp ebx, edx //if current index == mStringLen
+	je 1f //go to 1f
+
+	push rdx
+	push rdi
+	push rbx
+	push rsi
+	push rcx
+
+	call strncmp@plt 
+
+	pop rcx
+	pop rsi
+	pop rbx
+	pop rdi
+	pop rdx
+
+	cmp eax, 0 //see if they were the same
+	je 2f //if they were go to 2f
+	inc rdi //inc current address
+	jmp 1b
+
+1: //not found
+	mov eax, -1
 	ret
+2: //found
+	mov eax, ebx
+	ret
+	
 
 //const char *c_str() const
 .global _ZNK8mystring5c_strEv
