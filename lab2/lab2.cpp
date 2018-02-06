@@ -55,25 +55,11 @@ public:
 	//will need to return the reference of ostream &s.
 	friend ostream &operator<<(ostream &s, const mystring &rhs);
 };
-/*
-mystring::~mystring()
-{
-	if( mString )
-		delete mString;
-	mString = nullptr;
-	mStringLength = 0;
-}*/
-
-
 
 int
 main()
 {
-	mystring a= mystring("Hello\n");
-	mystring b = "el";
-	int index = a.find(b);
-	cout << index << endl;
-	cout << a << b << a << b << a << b << a;
-
+	mystring a = mystring("sick\n");
+	cout << a.length() << " | " << a;
 	return 0;
 }

@@ -1,10 +1,17 @@
 .intel_syntax noprefix
 
+/*
+Kirolos Shahat
+Lab 2 -- CS 365
+*/
+
 .section .rodata
+//empty string label
 empt: .asciz ""
 
 .section .text
 
+//destructor
 //~mystring()
 .global _ZN8mystringD1Ev
 _ZN8mystringD1Ev:
@@ -15,9 +22,12 @@ _ZN8mystringD1Ev:
 	je 1f
 	//otherwise free
 	mov rdi, [rdi]
-	//call _Zd1Pv@plt
+	//calling free because of malloc call 
+	//used strdup
 	call free@plt
 1:
+	//set mstring to be NULL
+	mov QWORD PTR[rdi], 0
 	ret
 
 //mystring()
@@ -30,7 +40,6 @@ _ZN8mystringC1Ev:
 .global _ZN8mystringC1EPKc
 _ZN8mystringC1EPKc:
 	push rdi
-	push rsi
 	//move the new string into rdi
 	mov rdi, rsi
 	
@@ -38,7 +47,6 @@ _ZN8mystringC1EPKc:
 	call strdup@plt
 	
 	//get back the previous parameters
-	pop rsi
 	pop rdi
 
 	//mString = strdup
@@ -61,15 +69,17 @@ _ZN8mystringC1EPKc:
 //mystring(const mystring &rhs)
 .global _ZN8mystringC1ERKS_
 _ZN8mystringC1ERKS_:
-	//copy constructor
 	push rdi
 	push rsi
-	mov rdi, rsi
-
+	//this* doesn't change
+	//but rsi now is the char*
+	mov rsi, [rsi]
+	
+	//call char* constructor
 	call _ZN8mystringC1EPKc@plt
 
+	//pop out the old values
 	pop rsi
-	mov rsi, rdi
 	pop rdi
 	ret
 
@@ -102,21 +112,35 @@ _ZN8mystringaSEPKc:
 //mystring &operator=(const mystring &&rhs)
 .global _ZN8mystringaSEOKS_
 _ZN8mystringaSEOKS_:
+	//see if this->mString is null
 	cmp QWORD PTR[rdi], 0
+	//if it is then go to 1f
 	je 1f
+	//otherwise free what is currently there
 	push rdi
 	push rsi
+	//rdi = this->mString
 	mov rdi, [rdi]
+	//call free
 	call free@plt
+	//get back old this and rhs
 	pop rsi
 	pop rdi
 1:
+	//rsi = *rhs
 	mov rcx, [rsi]
+	//rcx = rcx->mString
 	mov rcx, [rcx]
-	mov QWORD PTR[rdi], rcx
-	mov rcx, [rcx]
-	mov ecx, [rcx]
-	mov DWORD PTR[rdi+8], ecx
+
+	//this->mString = (*rhs)->mString
+	mov [rdi], rcx
+	
+	//rcx = *rsi
+	mov rcx, [rsi]
+	mov ecx, [rcx+8]
+	//put the size into this->mStringLength
+	mov [rdi+8], ecx
+	//rax = this
 	mov rax, rdi
 	ret
 
@@ -138,60 +162,44 @@ _ZNK8mystring4findEPKc:
 	push rdi
 	push rsi
 
-	mov rdi, rsi
-	call strlen@plt
-	mov ecx, eax //r8d is strlen of the needle
-	
+	mov rdi, [rdi]
+
+	//get address of substring from strstr
+	call strstr@plt
+
 	pop rsi
 	pop rdi
-
-	mov edx, [rdi + 8] //rdx is mStringLen	
-	mov rdi, [rdi] //rdi is mString
-	mov ebx, -1 //ebx is current index
-1:
-	inc ebx //increment index
-	cmp ebx, edx //if current index == mStringLen
-	je 1f //go to 1f
-
-	push rdx
-	push rdi
-	push rbx
-	push rsi
-	push rcx
-
-	call strncmp@plt 
-
-	pop rcx
-	pop rsi
-	pop rbx
-	pop rdi
-	pop rdx
-
-	cmp eax, 0 //see if they were the same
-	je 2f //if they were go to 2f
-	inc rdi //inc current address
-	jmp 1b
-
-1: //not found
-	mov eax, -1
+	//if strstr returns NULL then the substring is not in mString
+	cmp rax, 0
+	//therefore go to 1f because not found
+	je 1f
+	//index = substring_address - initial_address
+	mov rdi, [rdi]
+	sub rax, rdi
+	//go to 2f with the found index
+	jmp 2f
+1:	//not found
+	mov rax, -1
+2:	// return whatever rax is
 	ret
-2: //found
-	mov eax, ebx
-	ret
-	
 
 //const char *c_str() const
 .global _ZNK8mystring5c_strEv
 _ZNK8mystring5c_strEv:
+	//return this->mString
 	mov rax, [rdi]
 	ret
 
 //friend ostream &operator<<(...)
 .global _ZlsRSoRK8mystring
 _ZlsRSoRK8mystring:
+	//push out
 	push rdi
+	//parameter 2 is now mString
 	mov rsi, [rsi]
+	//call out.operator<<(const char*)
 	call _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt
+	//pop the out into rax so that we can chain
 	pop rax
 	ret
 
