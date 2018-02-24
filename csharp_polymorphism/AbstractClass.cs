@@ -2,9 +2,8 @@ using System;
 
 
 
-public abstract AbstractClass : ICompValue
+public abstract class AbstractClass : ICompValue
 {
-    public int 
 
 
 
