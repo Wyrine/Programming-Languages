@@ -2,19 +2,7 @@ using System;
 
 public class DPD : AbstractClass
 {
-	public uint Raw
-	{
-		get
-		{
-			
-		}
-
-		set
-		{
-
-		}
-	}
-	public virtual uint Val
+	public override uint Val
 	{
 		get;
 	}
