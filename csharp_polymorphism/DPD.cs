@@ -1,6 +1,6 @@
 using System;
 
-public class DPD : AbstractClass
+class DPD : AbstractClass
 {
 	public override uint Val
 	{
