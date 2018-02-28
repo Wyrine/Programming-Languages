@@ -2,7 +2,9 @@ using System;
 
 public class DPD : AbstractClass
 {
-    public DPD() : Base(){ }
+    public DPD() : base(){
+        Console.Write("DPD: ");    
+    }
 	public override uint Val
 	{
 		get{ return mVal; }

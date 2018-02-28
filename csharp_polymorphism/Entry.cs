@@ -21,7 +21,7 @@ class EntryPoint
 
     public List<ICompValue> ReadFile()
     {
-        List<ICompValue> icv;
+        List<ICompValue> icv = new List<ICompValue>();
         DPD d;
         BCD b;
         while( br.BaseStream.Position != br.BaseStream.Length)
@@ -30,15 +30,19 @@ class EntryPoint
             uint data = br.ReadUInt32();
             if(mode == 1)//DPD
             {
-                d =  new DPD(data);  
+                d =  new DPD();  
+                d.Raw = data;
                 icv.Add(d);
             }
             else //BCD
             {
-                b = new BCD(data);
+                b = new BCD();
+                b.Raw = data;
                 icv.Add(b);
             }
         }
+        icv.Sort();
+        return icv;
     }
 
     ~EntryPoint()
@@ -54,6 +58,10 @@ class EntryPoint
             Console.Error.WriteLine("Expected arguments: InputFileName OutputFileName");
             return;
         }
-
+        ep = new EntryPoint(args[0]);
+        var ics = ep.ReadFile();
+        ics.ForEach(v => {
+            Console.WriteLine(v.Val);
+        });
     }
 }

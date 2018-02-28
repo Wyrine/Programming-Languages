@@ -17,14 +17,14 @@ public abstract class AbstractClass : ICompValue
         mVal = 0; 
     }
     //Raw gets uncoverted value 
-    public virtual uint Raw
+    public uint Raw
     {
         get { return mRaw; }
         set 
         { 
             mRaw = value; 
-            mRaw = (mRaw << 16) | (mRaw >> 16) |
-                ((mRaw << 8 ) & 0xFF00FF00) | ((mRaw >> 8) & 0xFF00FF);
+            mRaw = (mRaw << 24) | (mRaw >> 24) |
+                ((mRaw & (0xff << 8)) << 8) | ((mRaw & (0xff << 16)) >> 8) ;
         }
     }
     //Val is virtual and should be overridden when inherited
