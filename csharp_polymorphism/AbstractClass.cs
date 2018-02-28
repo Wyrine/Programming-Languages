@@ -10,21 +10,28 @@ using System;
 //AbstractClass inherits ICompValue
 public abstract class AbstractClass : ICompValue
 {
-    AbstractClass(uint i = 0)
+    protected uint mRaw, mVal;
+    public AbstractClass()
     {
-           Val = i; 
+        mRaw = 0;    
+        mVal = 0; 
     }
     //Raw gets uncoverted value 
     public virtual uint Raw
     {
-        get;
-        set;
+        get { return mRaw; }
+        set 
+        { 
+            mRaw = value; 
+            mRaw = (mRaw << 16) | (mRaw >> 16) |
+                ((mRaw << 8 ) & 0xFF00FF00) | ((mRaw >> 8) & 0xFF00FF);
+        }
     }
     //Val is virtual and should be overridden when inherited
     public virtual uint Val { get; }
 
-    //Implementation of 
-    public int CompareTo(Object rhs)
+    //Implementation of CompareTo for List 
+    public int CompareTo(object rhs)
     {
         if (Val < ((AbstractClass) rhs).Val)
             return -1;

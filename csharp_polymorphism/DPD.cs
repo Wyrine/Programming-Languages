@@ -1,11 +1,10 @@
 using System;
 
-class DPD : AbstractClass
+public class DPD : AbstractClass
 {
+    public DPD() : Base(){ }
 	public override uint Val
 	{
-		get;
+		get{ return mVal; }
 	}
-
-
 }
