@@ -10,11 +10,10 @@ using System;
 //AbstractClass inherits ICompValue
 public abstract class AbstractClass : ICompValue
 {
-    protected uint mRaw, mVal;
+    protected uint mRaw;
     public AbstractClass()
     {
         mRaw = 0;    
-        mVal = 0; 
     }
     //Raw gets uncoverted value 
     public uint Raw

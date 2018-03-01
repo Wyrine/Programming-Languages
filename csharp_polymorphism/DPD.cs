@@ -7,6 +7,6 @@ public class DPD : AbstractClass
     }
 	public override uint Val
 	{
-		get{ return mVal; }
+		get;
 	}
 }

@@ -60,8 +60,11 @@ class EntryPoint
         }
         ep = new EntryPoint(args[0]);
         var ics = ep.ReadFile();
-        ics.ForEach(v => {
-            Console.WriteLine(v.Val);
-        });
+        using (StreamWriter sr = new StreamWriter(args[1]))
+        {
+            ics.ForEach(v => {
+                sr.WriteLine(v.Val);
+            });
+        }
     }
 }

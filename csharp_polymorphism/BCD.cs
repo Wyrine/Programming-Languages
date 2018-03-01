@@ -8,8 +8,7 @@ and bitwise or with val
 */
 public class BCD : AbstractClass
 {
-    public BCD() : base() { 
-    }
+    public BCD() : base() { }
     public override uint Val
     {
         get
