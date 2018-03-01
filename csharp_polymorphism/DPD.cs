@@ -1,8 +1,18 @@
 using System;
+/*
+    Author: Kirolos Shahat
+    Course: CS365 -- Programming Languages and Systems
+    Professor: Dr. Stephen Marz
+    class DPD -- Densely Packed Decimal
+        stores 9 decimals into a 32-bit unsigned int saving 2 bits
+*/
+
 
 public class DPD : AbstractClass
 {
+    //Constructor -- Does nothing
     public DPD() : base(){}
+    //Val property
     public override uint Val
     {
         get

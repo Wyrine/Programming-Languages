@@ -1,3 +1,10 @@
+/*
+    Author: Kirolos Shahat
+    Course: CS365 -- Programming Languages and Systems
+    Professor: Dr. Stephen Marz
+    interface ICompValue
+        Inherits IComparable for base classes
+*/
 interface ICompValue : System.IComparable
 {
      /// System.IComparable.CompareTo(object)

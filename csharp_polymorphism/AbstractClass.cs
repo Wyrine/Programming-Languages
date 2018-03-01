@@ -1,14 +1,17 @@
-/*
-Author: Kirolos Shahat
-Due Date: March 1, 2018
-AbstractClass implementation which inherits ICompValue
-*/
 using System;
+/*
+    Author: Kirolos Shahat
+    Course: CS365 -- Programming Languages and Systems
+    Professor: Dr. Stephen Marz
+    abstract class AbstractClass
+        inherited by BCD and DPD
+*/
 
 //AbstractClass inherits ICompValue
 public abstract class AbstractClass : ICompValue
 {
     protected uint mRaw;
+    //Constructor -- init mRaw to 0
     public AbstractClass()
     {
         mRaw = 0;    
@@ -19,6 +22,7 @@ public abstract class AbstractClass : ICompValue
         get { return mRaw; }
         set 
         { 
+            //swap endiannes
             mRaw = value; 
             mRaw = (mRaw << 24) | (mRaw >> 24) | 
                     ((mRaw << 8) & 0xff0000) | ((mRaw >> 8) & 0xff00);
