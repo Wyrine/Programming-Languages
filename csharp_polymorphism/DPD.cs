@@ -2,15 +2,13 @@ using System;
 
 public class DPD : AbstractClass
 {
-    public DPD() : base(){
-    }
+    public DPD() : base(){}
     public override uint Val
     {
         get
         {
-            uint soln = 0;
-            uint tmp = 0;
-            uint x = 0, b1 = 0, b2 = 0, b3 = 0;
+            uint tmp = 0, x = 0, b1 = 0, b2 = 0, b3 = 0;
+            string t = "";
             for(int i = 0; i < 3; i++)
             {
                 x = (mRaw >> (i * 10)) & (uint)0x3ff;
@@ -34,12 +32,12 @@ public class DPD : AbstractClass
                         else if (tmp == 1) // case 6
                         {
                             //100c 0def 100i | de c01f 111i
-                            //      i           1
-                            b1 = (1 & x) | (1 << 3); //100i
+                            //      100i
+                            b1 = (9 & x); //100i
                             //      f                   de
-                            b2 = ((1 << 4) & x) | ((x >> 3) & (3 << 5)); //0def
+                            b2 = ((8<<1) & x) | ((x >> 3) & (6 << 4)); //0def
                             //          c                   //1
-                            b3 = ((x & (1 << 7) ) << 1) | ( 1 << 11); //100c
+                            b3 = (8<<8) | ((x << 1) & (1 << 8)); //100c
                         }
                         else if (tmp == 2)// case 7
                         {
@@ -72,7 +70,7 @@ public class DPD : AbstractClass
                             //      def
                             b2 = x & ( 7 << 4); //0def
                             //     abc 
-                            b3 = (x & (7 << 7)) << 1; //0abc
+                            b3 = (x << 1) & ( 7 << 8); //0abc
                         }
                         else if(tmp == 1) //case 3
                         {
@@ -106,11 +104,11 @@ public class DPD : AbstractClass
                     //      abc 
                     b3 = (x & (7 << 7) << 1) ; //0abc
                 }
-                b1 = b1 << 8;
+                b2 = b2 >> 4;
                 b3 = b3 >> 8;
-                soln = soln | ((b1 | b2 | b3) << (i * 12));
+                t = b3.ToString() + b2.ToString() + b1.ToString() +  t;
             }
-            return soln;
+            return Convert.ToUInt32(t);
         }
     }
 }
