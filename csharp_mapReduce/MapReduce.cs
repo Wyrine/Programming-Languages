@@ -23,12 +23,6 @@ public partial class MapReduce<T>
 
     public T this[int i]
     {
-        get
-        {
-            if( mCount >= i)
-                return mList[i];
-            else
-                return default(T);
-        }
+        get{ return mList[i]; }
     }
 }
