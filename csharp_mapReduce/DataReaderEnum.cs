@@ -2,25 +2,25 @@ using System;
 using System.Collections;
 
 /*
-    Author: Kirolos Shahat
-    Course: CS 365 -- Programming Languages and Systems
-    Course Instructor: Dr. Stephen Marz
-    Due Date: March 8th, 2018
+Author: Kirolos Shahat
+Course: CS 365 -- Programming Languages and Systems
+Course Instructor: Dr. Stephen Marz
+Due Date: March 8th, 2018
 
-    Description:
-        DataReaderEnum.cs -- Definition of DataReaderEnum class which implements IEnumerator
-                            for DataReader class
+Description:
+DataReaderEnum.cs -- Definition of DataReaderEnum class which implements IEnumerator
+for DataReader class
 
-    Method:
-        - DataReaderEnum constructor(ref double[]) -- points to the same data as DataReader
-        
-        - IEnumerator.Current.get -- returns mArr at the current index
+Methods:
+    - DataReaderEnum constructor(ref double[]) -- points to the same data as DataReader
 
-        - Reset -- Sets the current index back to the start point
+    - IEnumerator.Current.get -- returns mArr at the current index
 
-        - MoveNext -- increments the current index and true if it is still less than the size
-                        of the Array
-*/
+    - Reset -- Sets the current index back to the start point
+
+    - MoveNext -- increments the current index and true if it is still less than the size
+                    of the Array
+ */
 
 //DataReaderEnum class definition which implements IEnumerator
 public class DataReaderEnum : IEnumerator
