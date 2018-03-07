@@ -20,5 +20,6 @@ public partial class MapReduce<T>
     public async Task<T> ReduceAsync(ReduceWork rw)
     {
        return await Task.Run(() => { return Reduce(rw); }); 
+
     }
 }
