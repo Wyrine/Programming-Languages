@@ -45,7 +45,7 @@ public class DataReader : IEnumerable
 					tmp.Add(br.ReadDouble());
 			}
 			//catch when loop ends
-			catch(EndOfStreamException eof){}
+			catch{}
 			finally //this works because there is at least one element in tmp
 			{
 				mCount = tmp.Count;
