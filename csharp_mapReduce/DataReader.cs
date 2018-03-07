@@ -10,8 +10,7 @@ using System.Collections.Generic;
     Due Date: March 8th, 2018
 
     Description:
-
-    DataReader.cs -- definition of DataReader class which implements IEnumerable
+        DataReader.cs -- definition of DataReader class which implements IEnumerable
 
     Methods: 
         - DataReader(string) -- takes a string which is a filename representing a binary file
