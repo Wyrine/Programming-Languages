@@ -24,13 +24,47 @@ class Pixel:
 	def setGreen(self, g):
 		self.__mDict["g"] = g
 
+class PPM:
+	def __init__(self):
+		#this needs to be 2D
+		self.__mPix = []
+
+	def invert(self):
+		pass
+
+	def flipHorizontal(self):
+		pass
+	
+	def flipVertical(self):
+		pass
+	
+	def addPixel(self, pix):
+		self.__mPix.append(pix)
+	
+	def clearPixels(self):
+		self.__mPix.clear()
+	
+	def getPixel(self, x, y):
+		pass
+	
+	def setPixel(self, x, y, pix):
+		pass
+
+	def getHeight(self):
+		pass
+	
+	def getWidth(self):
+		pass
+
+	def getMaxIntensity(self):
+		pass
+
 def main():
 	if len(argv) < 4:
 		print("Usage: ./main.py <input_file> <output_file> <mode>")
 		return 1
 	
 	return 0
-
 
 if __name__ == "__main__":
 	exit(main())
