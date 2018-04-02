@@ -35,7 +35,10 @@ class PPM:
 		for i in range(len(self.__mPix)):
 			self.__mPix[i].invert(self.__maxIntensity)
 	def flipHorizontal(self):
-		self.__mPix[:] = self.__mPix[:][::-1]
+		for i in range(self.__h):
+				for j in range(self.__w // 2):
+						i1, i2 = i*self.__w + j, i*self.__w + self.__w - 1 - j
+						self.__mPix[i2], self.__mPix[i1] = self.__mPix[i1], self.__mPix[i2]
 	def flipVertical(self):
 		self.__mPix = self.__mPix[::-1]
 	def addPixel(self, pix):
