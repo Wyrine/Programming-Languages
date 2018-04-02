@@ -5,106 +5,65 @@ from sys import argv, exit
 class Pixel:
 	def __init__(self, r=0, g=0, b=0):
 		self.__mDict = {"r": r, "g": g, "b":b}
-
 	def getRed(self):
 		return self.__mDict["r"]
-
 	def getGreen(self):
 		return self.__mDict["g"]
-
 	def getBlue(self):
 		return self.__mDict["b"]
-
 	def invert(self, offVal):
 		self.__mDict["r"] = offVal - self.__mDict["r"]
 		self.__mDict["g"] = offVal - self.__mDict["g"]
 		self.__mDict["b"] = offVal - self.__mDict["b"]
-
 	def setRed(self, r):
-		if r is not int:
-			raise TypeError
+		if r is not int: raise TypeError
 		self.__mDict["r"] = r
-
 	def setBlue(self, b):
-		if b is not int:
-			raise TypeError
+		if b is not int: raise TypeError
 		self.__mDict["b"] = b
-
 	def setGreen(self, g):
-		if g is not int:
-			raise TypeError
+		if g is not int: raise TypeError
 		self.__mDict["g"] = g
 
 class PPM:
 	def __init__(self, w, h, intensity):
 		self.__mPix = []
-		self.__curRow = 0 
-		self.__curCol = -1
-		tmp = [None for i in range(w)]
-
-		for i in range(h):
-			self.__mPix.append(tmp[:])
-
 		self.__maxIntensity = intensity
 		self.__w = w
 		self.__h = h
-
 	def invert(self):
-		for row in self.__mPix:
-			for pix in row:
-				if pix == None:
-					raise IndexError
-				pix.invert(self.__maxIntensity)
-
+		for i in range(len(self.__mPix)):
+			self.__mPix[i].invert(self.__maxIntensity)
 	def flipHorizontal(self):
-		pass
-	
+		self.__mPix[:] = self.__mPix[:][::-1]
 	def flipVertical(self):
-		pass
-	
+		self.__mPix = self.__mPix[::-1]
 	def addPixel(self, pix):
-		self.__curCol += 1
-		if self.__curCol == self.__w:
-			self.__curCol = 0
-			self.__curRow += 1
-		if self.__curRow == self.__h:
+		if len(self.__mPix) == self.__w * self.__h:
 			raise IndexError
-		self.__mPix[self.__curRow][self.__curCol] = pix
-		print(pix.getRed(), pix.getGreen(), pix.getBlue())
-
+		self.__mPix.append(pix)
 	def clearPixels(self):
 		self.__mPix.clear()	
-		self.__curRow = 0
-		self.__curCol = -1
-		tmp = [None for i in range(w)]
-
-		for i in range(h):
-			self.__mPix.append(x[:])
-
 	def getPixel(self, x, y):
-		if x >= self.__w or y >= self.__h or self.__mPix[x][y] == None:
+		if x >= self.__w or y >= self.__h: 
 			raise KeyError
-		return self.__mPix[x][y]
-
+		return self.__mPix[y*self.__w + x]
 	def setPixel(self, x, y, pix):
 		if x >= self.__w or y >= self.__h:
 			raise KeyError
-		self.__mPix[x][y] = pix
-
+		self.__mPix[y*self.__w + x] = pix
 	def getHeight(self):
 		return self.__h
-	
 	def getWidth(self):
 		return self.__w
-
 	def getMaxIntensity(self):
 		return self.__maxIntensity
 
 def buildPPM(fName):
 	ppm = None
 	with open(fName) as fin:
-		if "P3" not in fin.readline():
-			raise IOError
+		if "P3" != fin.readline().strip(' \n'):
+			return 1
 		try:
 			#read line that has width and height
 			t = fin.readline().split()
@@ -114,8 +73,7 @@ def buildPPM(fName):
 			maxInt = int(t[0])
 			#make a new ppm instance
 			ppm = PPM(w,h,maxInt)	
-
-		except: raise IOError
+		except: return 1
 	
 		#for all lines
 		for line in fin:
@@ -133,11 +91,10 @@ def normalWrite(ofName, ppm):
 	with open(ofName, "w") as fout:
 		r, c, mI = ppm.getHeight(), ppm.getWidth(), ppm.getMaxIntensity()
 		fout.write("P3\n" + str(c) + " " + str(r) + "\n" + str(mI))	
-		for i in range(r):#TODO: Change this
-			for j in range(c):#TODO: Change this
-				pix = ppm.getPixel(i,j)
+		for y in range(r):
+			for x in range(c):
+				pix = ppm.getPixel(x, y)
 				fout.write("\n" + str(pix.getRed()) + " " + str(pix.getGreen()) + " " + str(pix.getBlue()))
-	
 
 def writeFile(ofName, flag, ppm):
 	if flag == "V":
@@ -147,8 +104,9 @@ def writeFile(ofName, flag, ppm):
 	elif flag == "FV":
 		ppm.flipVertical()
 	elif flag != "N":
-		raise ValueError
+		return 1
 	normalWrite(ofName, ppm)
+	return 0
 
 def main():
 	if len(argv) < 4:
@@ -156,8 +114,7 @@ def main():
 		return 1
 
 	ppm = buildPPM(argv[1])
-	writeFile(argv[2], argv[3], ppm)
-	return 0
+	return writeFile(argv[2], argv[3], ppm)
 
 if __name__ == "__main__":
 	exit(main())
