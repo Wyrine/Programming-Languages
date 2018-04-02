@@ -37,7 +37,6 @@ class Pixel:
 
 class PPM:
 	def __init__(self, w, h, intensity):
-		#this needs to be 2D
 		self.__mPix = []
 		self.__curRow = 0 
 		self.__curCol = -1
@@ -83,7 +82,7 @@ class PPM:
 			self.__mPix.append(x[:])
 
 	def getPixel(self, x, y):
-		if x >= self.__w or y >= self.__h or self.__mPex[x][y] == None:
+		if x >= self.__w or y >= self.__h or self.__mPix[x][y] == None:
 			raise KeyError
 		return self.__mPix[x][y]
 
@@ -130,12 +129,34 @@ def buildPPM(fName):
 				ppm.addPixel(pix)	
 	return ppm
 
+def normalWrite(ofName, ppm):
+	with open(ofName, "w") as fout:
+		r, c, mI = ppm.getHeight(), ppm.getWidth(), ppm.getMaxIntensity()
+		fout.write("P3\n" + str(c) + " " + str(r) + "\n" + str(mI))	
+		for i in range(r):#TODO: Change this
+			for j in range(c):#TODO: Change this
+				pix = ppm.getPixel(i,j)
+				fout.write("\n" + str(pix.getRed()) + " " + str(pix.getGreen()) + " " + str(pix.getBlue()))
+	
+
+def writeFile(ofName, flag, ppm):
+	if flag == "V":
+		ppm.invert()
+	elif flag == "FH":
+		ppm.flipHorizontal()
+	elif flag == "FV":
+		ppm.flipVertical()
+	elif flag != "N":
+		raise ValueError
+	normalWrite(ofName, ppm)
+
 def main():
 	if len(argv) < 4:
 		print("Usage: ./lab6.py <input_file> <output_file> <mode>")
 		return 1
 
 	ppm = buildPPM(argv[1])
+	writeFile(argv[2], argv[3], ppm)
 	return 0
 
 if __name__ == "__main__":
