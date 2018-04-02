@@ -74,6 +74,10 @@ class PPM:
 		return self.__maxIntensity
 
 def buildPPM(fName):
+	"""
+		Reads and builds a ppm object from the ppm formatted file fName
+		and returns the ppm object generated. Returns 1 if there is an error
+	"""
 	ppm = None
 	with open(fName) as fin:
 		if "P3" != fin.readline().strip(' \n'):
@@ -101,7 +105,11 @@ def buildPPM(fName):
 				ppm.addPixel(pix)	
 	return ppm
 
-def normalWrite(ofName, ppm):
+def normalWrite(ppm, ofName):
+	"""
+		opens ofName and writes the current pixels of the ppm class to it
+		with the needed headers of a ppm file
+	"""
 	with open(ofName, "w") as fout:
 		r, c, mI = ppm.getHeight(), ppm.getWidth(), ppm.getMaxIntensity()
 		fout.write("P3\n" + str(c) + " " + str(r) + "\n" + str(mI))	
@@ -110,7 +118,12 @@ def normalWrite(ofName, ppm):
 				pix = ppm.getPixel(x, y)
 				fout.write("\n" + str(pix.getRed()) + " " + str(pix.getGreen()) + " " + str(pix.getBlue()))
 
-def writeFile(ofName, flag, ppm):
+def writeFile(ppm, ofName, flag):
+	"""
+		Performs the proper operation given by command line argument on the ppm
+		pixels and then calls normalWrite to print them out. Returns 1 if flag
+		was not recognized.
+	"""
 	if flag == "V":
 		ppm.invert()
 	elif flag == "FH":
@@ -119,16 +132,14 @@ def writeFile(ofName, flag, ppm):
 		ppm.flipVertical()
 	elif flag != "N":
 		return 1
-	normalWrite(ofName, ppm)
+	normalWrite(ppm, ofName)
 	return 0
 
 def main():
 	if len(argv) < 4:
 		print("Usage: ./lab6.py <input_file> <output_file> <mode>")
 		return 1
-
-	ppm = buildPPM(argv[1])
-	return writeFile(argv[2], argv[3], ppm)
+	return writeFile(buildPPM(argv[1]), argv[2], argv[3])
 
 if __name__ == "__main__":
 	exit(main())
