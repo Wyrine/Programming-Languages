@@ -25,9 +25,12 @@ class Pixel:
 		self.__mDict["g"] = g
 
 class PPM:
-	def __init__(self):
+	def __init__(self, w, h, intensity):
 		#this needs to be 2D
 		self.__mPix = []
+		self.__maxIntensity = intensity
+		self.__w = w
+		self.__h = h
 
 	def invert(self):
 		pass
@@ -39,27 +42,52 @@ class PPM:
 		pass
 	
 	def addPixel(self, pix):
-		self.__mPix.append(pix)
+		if len(self.__mPix[-1]) < self.__w:
+			self.__mPix[-1].append(pix)
+		else:
+			self.__mPix.append([pix])
 	
 	def clearPixels(self):
 		self.__mPix.clear()
 	
 	def getPixel(self, x, y):
-		pass
-	
+		try:
+			return self.__mPix[x][y]
+		except:
+			raise KeyError
+
 	def setPixel(self, x, y, pix):
-		pass
+		try:
+			self.__mPix[x][y] = pix
+		except:
+			raise KeyError
 
 	def getHeight(self):
-		pass
+		return self.__h
 	
 	def getWidth(self):
-		pass
+		return self.__w
 
 	def getMaxIntensity(self):
-		pass
+		return self.__maxIntensity
+
+def buildPPM(fName):
+	ppm = 0
+	with open(fName) as fin:
+		if "P3" not in fin.readline():
+			return 2
+		try:
+			t = fin.readline().split()
+			w, h = int(t[0]), int(t[1])
+			t = fin.readline().split()
+			maxInt = int(t[0])
+			ppm = PPM(w,h,maxInt)	
+			
+		except IndexError:
+			raise IOError
 
 def main():
+	buildPPM(argv[1])
 	if len(argv) < 4:
 		print("Usage: ./main.py <input_file> <output_file> <mode>")
 		return 1
