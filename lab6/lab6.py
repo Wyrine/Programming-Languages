@@ -3,8 +3,8 @@
 from sys import argv, exit
 
 class Pixel:
-	def __init__(self):
-		self.__mDict = {"r": 0, "g": 0, "b":0}
+	def __init__(self, r=0, g=0, b=0):
+		self.__mDict = {"r": r, "g": g, "b":b}
 
 	def getRed(self):
 		return self.__mDict["r"]
@@ -15,25 +15,47 @@ class Pixel:
 	def getBlue(self):
 		return self.__mDict["b"]
 
+	def invert(self, offVal):
+		self.__mDict["r"] = offVal - self.__mDict["r"]
+		self.__mDict["g"] = offVal - self.__mDict["g"]
+		self.__mDict["b"] = offVal - self.__mDict["b"]
+
 	def setRed(self, r):
+		if r is not int:
+			raise TypeError
 		self.__mDict["r"] = r
 
 	def setBlue(self, b):
+		if b is not int:
+			raise TypeError
 		self.__mDict["b"] = b
 
 	def setGreen(self, g):
+		if g is not int:
+			raise TypeError
 		self.__mDict["g"] = g
 
 class PPM:
 	def __init__(self, w, h, intensity):
 		#this needs to be 2D
 		self.__mPix = []
+		self.__curRow = 0 
+		self.__curCol = -1
+		tmp = [None for i in range(w)]
+
+		for i in range(h):
+			self.__mPix.append(tmp[:])
+
 		self.__maxIntensity = intensity
 		self.__w = w
 		self.__h = h
 
 	def invert(self):
-		pass
+		for row in self.__mPix:
+			for pix in row:
+				if pix == None:
+					raise IndexError
+				pix.invert(self.__maxIntensity)
 
 	def flipHorizontal(self):
 		pass
@@ -42,25 +64,33 @@ class PPM:
 		pass
 	
 	def addPixel(self, pix):
-		if len(self.__mPix[-1]) < self.__w:
-			self.__mPix[-1].append(pix)
-		else:
-			self.__mPix.append([pix])
-	
+		self.__curCol += 1
+		if self.__curCol == self.__w:
+			self.__curCol = 0
+			self.__curRow += 1
+		if self.__curRow == self.__h:
+			raise IndexError
+		self.__mPix[self.__curRow][self.__curCol] = pix
+		print(pix.getRed(), pix.getGreen(), pix.getBlue())
+
 	def clearPixels(self):
-		self.__mPix.clear()
-	
+		self.__mPix.clear()	
+		self.__curRow = 0
+		self.__curCol = -1
+		tmp = [None for i in range(w)]
+
+		for i in range(h):
+			self.__mPix.append(x[:])
+
 	def getPixel(self, x, y):
-		try:
-			return self.__mPix[x][y]
-		except:
+		if x >= self.__w or y >= self.__h or self.__mPex[x][y] == None:
 			raise KeyError
+		return self.__mPix[x][y]
 
 	def setPixel(self, x, y, pix):
-		try:
-			self.__mPix[x][y] = pix
-		except:
+		if x >= self.__w or y >= self.__h:
 			raise KeyError
+		self.__mPix[x][y] = pix
 
 	def getHeight(self):
 		return self.__h
@@ -72,26 +102,40 @@ class PPM:
 		return self.__maxIntensity
 
 def buildPPM(fName):
-	ppm = 0
+	ppm = None
 	with open(fName) as fin:
 		if "P3" not in fin.readline():
-			return 2
+			raise IOError
 		try:
+			#read line that has width and height
 			t = fin.readline().split()
 			w, h = int(t[0]), int(t[1])
+			#read line that has max intensity
 			t = fin.readline().split()
 			maxInt = int(t[0])
+			#make a new ppm instance
 			ppm = PPM(w,h,maxInt)	
-			
-		except IndexError:
-			raise IOError
+
+		except: raise IOError
+	
+		#for all lines
+		for line in fin:
+			#make a list based on white space separation and remove new lines
+			tmp = line.replace("\n", "").split()
+			#Iterate through multiples of three for rgb and get those values
+			for i in range(0, len(tmp), 3):
+				r, g, b = int(tmp[i]), int(tmp[i+1]), int(tmp[i+2])
+				#otherwise create a new pixel instance and add to ppm
+				pix = Pixel(r,g,b)
+				ppm.addPixel(pix)	
+	return ppm
 
 def main():
-	buildPPM(argv[1])
 	if len(argv) < 4:
-		print("Usage: ./main.py <input_file> <output_file> <mode>")
+		print("Usage: ./lab6.py <input_file> <output_file> <mode>")
 		return 1
-	
+
+	ppm = buildPPM(argv[1])
 	return 0
 
 if __name__ == "__main__":
