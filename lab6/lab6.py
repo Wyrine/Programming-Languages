@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# Kirolos Shahat
+# CS 365 -- Lab 6
+# Due Date: April 12th
+
 from sys import argv, exit
 
 class Pixel:
@@ -12,6 +16,10 @@ class Pixel:
 	def getBlue(self):
 		return self.__mDict["b"]
 	def invert(self, offVal):
+		"""
+				subtracts the current intensity off of the offVal given
+				as a parameter for all intensities
+		"""
 		self.__mDict["r"] = offVal - self.__mDict["r"]
 		self.__mDict["g"] = offVal - self.__mDict["g"]
 		self.__mDict["b"] = offVal - self.__mDict["b"]
@@ -37,9 +45,12 @@ class PPM:
 	def flipHorizontal(self):
 		for i in range(self.__h):
 				for j in range(self.__w // 2):
+						#indexes to swap
 						i1, i2 = i*self.__w + j, i*self.__w + self.__w - 1 - j
+						#swap the two values
 						self.__mPix[i2], self.__mPix[i1] = self.__mPix[i1], self.__mPix[i2]
 	def flipVertical(self):
+		#reverse the list
 		self.__mPix = self.__mPix[::-1]
 	def addPixel(self, pix):
 		if len(self.__mPix) == self.__w * self.__h:
