@@ -89,10 +89,15 @@ class PPM
 
 function buildPPM(fName)
 {
-	var ppm = undefined;
-	var fin = fs.createReadStream(fName, {flags: 'r', encoding: 'utf8', fd: null, mode:0o666, autoClose: true});
+	var d = '';
+	const fin = fs.createReadStream(fName, {flags: 'r', encoding: 'utf8'});
 	fin.on('data', (chunk) => {
-		console.log(chunk.toString('utf8'));
+		d += chunk;
+	});
+	fin.on('close', () => { 
+		d = d.split('\n');
+		var dims = d[1].split(' ');
+		//console.log(dims);
 	});
 }
 
