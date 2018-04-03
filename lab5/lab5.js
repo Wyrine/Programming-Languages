@@ -1,7 +1,7 @@
 #!/usr/bin/env js
 
 'use strict';
-const myfs = require('fs');
+const fs = require('fs');
 
 class Pixel
 {
@@ -87,6 +87,15 @@ class PPM
 	}
 }
 
+function buildPPM(fName)
+{
+	var ppm = undefined;
+	var fin = fs.createReadStream(fName, {flags: 'r', encoding: 'utf8', fd: null, mode:0o666, autoClose: true});
+	fin.on('data', (chunk) => {
+		console.log(chunk.toString('utf8'));
+	});
+}
+
 function main()
 {
 	if(process.argv.length < 5)
@@ -94,6 +103,7 @@ function main()
 		console.error(`Usage: ${process.argv[0]} ${process.argv[1]} <input> <output> <flag>`);
 		throw new RangeError();
 	}
+	buildPPM(process.argv[2]);
 	
 }
 //call main
