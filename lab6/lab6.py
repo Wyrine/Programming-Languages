@@ -46,7 +46,7 @@ class PPM:
 		for i in range(self.__h):
 				for j in range(self.__w // 2):
 						#indexes to swap
-						i1, i2 = i*self.__w + j, i*self.__w + self.__w - 1 - j
+						i1, i2 = i*self.__w+j, i*self.__w+self.__w-1-j
 						#swap the two values
 						self.__mPix[i2], self.__mPix[i1] = self.__mPix[i1], self.__mPix[i2]
 	def flipVertical(self):

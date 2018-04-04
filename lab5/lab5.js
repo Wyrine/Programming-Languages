@@ -5,13 +5,14 @@ const fs = require('fs');
 
 class Pixel
 {
-	constructor(_r = 0, _g = 0, _b = 0)
+	constructor(_r, _g, _b)
 	{
+		console.log
 		this.obj = {r: _r, g: _g, b: _b};
 	}
-	getRed() { return this.r; }
-	getGreen() { return this.g; }
-	getBlue() { return this.b; }
+	getRed() { return this.obj.r; }
+	getGreen() { return this.obj.g; }
+	getBlue() { return this.obj.b; }
 	setRed(r)
 	{
 		if(typeof(r) != 'number')
@@ -53,7 +54,8 @@ class PPM
 	invert()
 	{
 		for(var i in this.pArray)
-			this.pArray[i].invert(this.maxIntensity);
+			 //setImmediate( () = > { this.pArray[i].invert(this.maxIntensity); } );
+			 this.pArray[i].invert(this.maxIntensity);
 	}
 	addPixel(pix)
 	{
@@ -74,19 +76,22 @@ class PPM
 		return this.pArray[y*this.w + x];
 	}
 	clearPixels() { this.pArray.length = 0; }
-	flipVertical() { setImmediate(()=>{ this.pArray = this.pArray.reverse(); }); }
+	flipVertical() { 
+		//setImmediate(()=>{ this.pArray = this.pArray.reverse(); }); }
+		this.pArray = this.pArray.reverse();
+	}
 	flipHorizontal()
 	{
 		for(var i = 0; i < this.h; i++)
-			for(var j = 0; j < Math.floor(this.w /2); i++)
+			for(var j = 0; j < Math.floor(this.w * 0.5); j++)
 			{
-				setImmediate(() => {
+			//	setImmediate(() => {
 					var i1 = i*this.w + j;
 					var i2 = i*this.w + this.w -j -1;
 					var tmp = this.pArray[i1];
 					this.pArray[i1] = this.pArray[i2];
 					this.pArray[i2] = tmp;
-				});
+			//	});
 			}
 	}
 }
@@ -108,19 +113,17 @@ function readPPM()
 		d.shift();
 		//removing one newline at the end
 		d.pop();
-		setImmediate(() => {
+//		setImmediate( () => {
 			var ppm = buildPPM(new PPM(parseInt(dims[0]), parseInt(dims[1]), mI), d);
-			d.length = 0;
 			alterAndWritePPM(ppm);
-
-		});
+//		});
 	});
 }
 
 function buildPPM(ppm, data)
 {
 	data = data.join(' ').split(' ');
-	for(var i = 0; i < data.length; i+= 3)
+	for(var i = 0; i < data.length; i += 3)
 	{
 //		setImmediate(() =>{
 			var r = parseInt(data[i]);
@@ -165,11 +168,10 @@ function writePPM(ppm)
 		for(var j = 0; j < w; j++)
 		{
 //			setImmediate(() => {
-			var pix = ppm.getPixel(j, i);
-			fout.write(`\n${pix.getRed()} ${pix.getGreen()} ${pix.getBlue()}`);
+				var pix = ppm.getPixel(j, i);
+				fout.write(`\n${pix.getRed()} ${pix.getGreen()} ${pix.getBlue()}`);
 //			});
 		}
-
 	fout.end();
 }
 
