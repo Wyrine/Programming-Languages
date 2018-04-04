@@ -112,11 +112,11 @@ def normalWrite(ppm, ofName):
 	"""
 	with open(ofName, "w") as fout:
 		r, c, mI = ppm.getHeight(), ppm.getWidth(), ppm.getMaxIntensity()
-		fout.write("P3\n" + str(c) + " " + str(r) + "\n" + str(mI))	
+		fout.write("P3\n" + str(c) + " " + str(r) + "\n" + str(mI) + "\n")	
 		for y in range(r):
 			for x in range(c):
 				pix = ppm.getPixel(x, y)
-				fout.write("\n" + str(pix.getRed()) + " " + str(pix.getGreen()) + " " + str(pix.getBlue()))
+				fout.write(str(pix.getRed()) + " " + str(pix.getGreen()) + " " + str(pix.getBlue()) + "\n")
 
 def writeFile(ppm, ofName, flag):
 	"""

@@ -54,7 +54,6 @@ class PPM
 	invert()
 	{
 		for(var i in this.pArray)
-			 //setImmediate( () = > { this.pArray[i].invert(this.maxIntensity); } );
 			 this.pArray[i].invert(this.maxIntensity);
 	}
 	addPixel(pix)
@@ -77,7 +76,6 @@ class PPM
 	}
 	clearPixels() { this.pArray.length = 0; }
 	flipVertical() { 
-		//setImmediate(()=>{ this.pArray = this.pArray.reverse(); }); }
 		this.pArray = this.pArray.reverse();
 	}
 	flipHorizontal()
@@ -85,13 +83,11 @@ class PPM
 		for(var i = 0; i < this.h; i++)
 			for(var j = 0; j < Math.floor(this.w * 0.5); j++)
 			{
-			//	setImmediate(() => {
 					var i1 = i*this.w + j;
 					var i2 = i*this.w + this.w -j -1;
 					var tmp = this.pArray[i1];
 					this.pArray[i1] = this.pArray[i2];
 					this.pArray[i2] = tmp;
-			//	});
 			}
 	}
 }
@@ -113,24 +109,23 @@ function readPPM()
 		d.shift();
 		//removing one newline at the end
 		d.pop();
-//		setImmediate( () => {
+		setImmediate( () => {
 			var ppm = buildPPM(new PPM(parseInt(dims[0]), parseInt(dims[1]), mI), d);
 			alterAndWritePPM(ppm);
-//		});
+		});
 	});
 }
 
 function buildPPM(ppm, data)
 {
 	data = data.join(' ').split(' ');
+	data = data.filter(data => data.length > 0);
 	for(var i = 0; i < data.length; i += 3)
 	{
-//		setImmediate(() =>{
-			var r = parseInt(data[i]);
-			var g = parseInt(data[i+1]);
-			var b = parseInt(data[i+2]);
-			ppm.addPixel(new Pixel(r,g,b));
-//		});
+		var r = parseInt(data[i]);
+		var g = parseInt(data[i+1]);
+		var b = parseInt(data[i+2]);
+		ppm.addPixel(new Pixel(r,g,b));
 	}
 	return ppm;
 }
@@ -153,7 +148,9 @@ function alterAndWritePPM(ppm)
 		default:
 			throw `Unkown argument ${process.argv[4]}`;
 	}
-	writePPM(ppm);
+	setImmediate( () =>{
+		writePPM(ppm);
+	});
 }
 
 function writePPM(ppm)
@@ -163,16 +160,15 @@ function writePPM(ppm)
 	var h = ppm.getHeight();
 	var mI = ppm.getMaxIntensity();
 	
-	fout.write(`P3\n${w} ${h}\n${mI}`);
+	fout.write(`P3\n${w} ${h}\n${mI}\n`);
 	for(var i = 0; i< h; i++)
 		for(var j = 0; j < w; j++)
 		{
-//			setImmediate(() => {
 				var pix = ppm.getPixel(j, i);
-				fout.write(`\n${pix.getRed()} ${pix.getGreen()} ${pix.getBlue()}`);
-//			});
+				fout.write(`${pix.getRed()} ${pix.getGreen()} ${pix.getBlue()}\n`);
 		}
-	fout.end();
+
+	setImmediate( () => {fout.end()});
 }
 
 function main()
