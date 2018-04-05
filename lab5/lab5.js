@@ -16,27 +16,35 @@ class Pixel
 		console.log
 		this.obj = {r: _r, g: _g, b: _b};
 	}
+	//getters
 	getRed() { return this.obj.r; }
 	getGreen() { return this.obj.g; }
 	getBlue() { return this.obj.b; }
+	get Red() { return this.obj.r; }
+	get Green() { return this.obj.g; }
+	get Blue() { return this.obj.b; }
+	//setters
 	setRed(r)
 	{
 		if(typeof(r) != 'number')
 		{ throw new TypeError(); }
 		this.obj["r"] = r;
 	}
-	setRed(g)
+	setGreen(g)
 	{
 		if(typeof(g) != 'number')
 		{ throw new TypeError(); }
 		this.obj["g"] = g;
 	}
-	setRed(b)
+	setBlue(b)
 	{
 		if(typeof(b) != 'number')
 		{ throw new TypeError(); }
 		this.obj["b"] = b;
 	}
+	set Red(r){ this.setRed(r); }
+	set Green(g){ this.setGreen(g); }
+	set Blue(b){ this.setBlue(b); }
 	invert(offVal)
 	{
 		this.obj['r'] = offVal - this.obj['r'];
@@ -57,6 +65,9 @@ class PPM
 	getHeight() { return this.h; }
 	getWidth() { return this.w; }
 	getMaxIntensity() { return this.maxIntensity; }
+	get Height() { return this.h; }
+	get Width() { return this.w; }
+	get MaxIntensity() { return this.maxIntensity; }
 	invert()
 	{
 		//iterate through all of the pixels and call each invert
@@ -86,11 +97,14 @@ class PPM
 	}
 	clearPixels() { this.pArray.length = 0; }
 	flipVertical() { 
-		for(var i = 0; var < Math.floor(this.h / 2); i++)
+		//swap order of rows
+		for(var i = 0; i< Math.floor(this.h * 0.5); i++)
 		{
-			var i2 = this.pArray.Length - i - 1;
+			//row to swap with
+			var i2 = this.h - i - 1;
 			for(var j = 0; j < this.w; j++)
 			{
+				//perform swaps
 				var j1 = i*this.w + j;
 				var j2 = i2*this.w + j;
 				var tmp = this.pArray[j1];
@@ -120,9 +134,11 @@ function readPPM()
 {
 	var d = '';
 	const fin = fs.createReadStream(process.argv[2], {flags: 'r', encoding: 'utf8'});
+	//do the reading
 	fin.on('data', (chunk) => {
 		d += chunk;
 	});
+	//once the reading is complete and the file is being closed.
 	fin.on('close', () => { 
 		//split the data on new line
 		d = d.split('\n');
@@ -195,9 +211,9 @@ function alterAndWritePPM(ppm)
 function writePPM(ppm)
 {
 	var fout = fs.createWriteStream(process.argv[3], {flags: 'w', encoding: 'utf8'});
-	var w = ppm.getWidth();
-	var h = ppm.getHeight();
-	var mI = ppm.getMaxIntensity();
+	var w = ppm.Width;
+	var h = ppm.Height;
+	var mI = ppm.MaxIntensity;
 	
 	//print the header to the file
 	fout.write(`P3\n${w} ${h}\n${mI}\n`);
@@ -205,11 +221,10 @@ function writePPM(ppm)
 	for(var i = 0; i< h; i++)
 		for(var j = 0; j < w; j++)
 		{
-				var pix = ppm.getPixel(j, i);
-				fout.write(`${pix.getRed()} ${pix.getGreen()} ${pix.getBlue()}\n`);
+			var pix = ppm.getPixel(j, i);
+			fout.write(`${pix.Red} ${pix.Green} ${pix.Blue}\n`);
 		}
-	//close the file whenever
-	setImmediate( () => {fout.end()});
+	fout.end();
 }
 
 function main()
