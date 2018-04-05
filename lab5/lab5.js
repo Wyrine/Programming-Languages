@@ -86,8 +86,18 @@ class PPM
 	}
 	clearPixels() { this.pArray.length = 0; }
 	flipVertical() { 
-		//reverse the array flips the image vertically
-		this.pArray = this.pArray.reverse();
+		for(var i = 0; var < Math.floor(this.h / 2); i++)
+		{
+			var i2 = this.pArray.Length - i - 1;
+			for(var j = 0; j < this.w; j++)
+			{
+				var j1 = i*this.w + j;
+				var j2 = i2*this.w + j;
+				var tmp = this.pArray[j1];
+				this.pArray[j1] = this.pArray[j2];
+				this.pArray[j2] = tmp;
+			}
+		}
 	}
 	flipHorizontal()
 	{
