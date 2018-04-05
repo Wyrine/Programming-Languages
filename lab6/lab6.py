@@ -51,7 +51,12 @@ class PPM:
 						self.__mPix[i2], self.__mPix[i1] = self.__mPix[i1], self.__mPix[i2]
 	def flipVertical(self):
 		#reverse the list
-		self.__mPix = self.__mPix[::-1]
+		w = self.__w
+		for i in range(self.__h // 2):
+				i2 = self.__h - i - 1
+				for j in range(w):
+						j1, j2 = i*w+j, i2*w+j
+						self.__mPix[j1], self.__mPix[j2] = self.__mPix[j2], self.__mPix[j1]
 	def addPixel(self, pix):
 		if len(self.__mPix) == self.__w * self.__h:
 			raise IndexError
