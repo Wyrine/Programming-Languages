@@ -50,7 +50,9 @@ class PPM:
 						#swap the two values
 						self.__mPix[i2], self.__mPix[i1] = self.__mPix[i1], self.__mPix[i2]
 	def flipVertical(self):
-		#reverse the list
+		"""
+				Reverse all rows
+		"""
 		w = self.__w
 		for i in range(self.__h // 2):
 				i2 = self.__h - i - 1
